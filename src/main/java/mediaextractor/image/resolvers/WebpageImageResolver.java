@@ -1,4 +1,4 @@
-package mediaextractor.image.filters;
+package mediaextractor.image.resolvers;
 
 import mediaextractor.image.ImageResolver;
 import org.jsoup.Jsoup;

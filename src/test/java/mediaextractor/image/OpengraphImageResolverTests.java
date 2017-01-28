@@ -1,6 +1,6 @@
 package mediaextractor.image;
 
-import mediaextractor.image.filters.OpengraphImageResolver;
+import mediaextractor.image.resolvers.OpengraphImageResolver;
 import org.junit.Test;
 
 import java.util.Optional;

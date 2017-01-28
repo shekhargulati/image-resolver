@@ -2,7 +2,6 @@ package mediaextractor.image;
 
 import java.util.Optional;
 
-@FunctionalInterface
 public interface ImageResolver {
 
     default Optional<String> resolve(final String url, final ImageExtractionOptions options, final ImageExtractionContext context) {

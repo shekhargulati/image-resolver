@@ -1,6 +1,6 @@
 package mediaextractor.image;
 
-import mediaextractor.image.filters.WebpageImageResolver;
+import mediaextractor.image.resolvers.WebpageImageResolver;
 import org.junit.Test;
 
 import java.util.Optional;
