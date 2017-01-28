@@ -69,6 +69,16 @@ public class OpengraphImageResolverTests {
         );
     }
 
+    @Test
+    public void should_resolve_image_from_github_url() throws Exception {
+        assertImage(
+                "https://github.com/sergiotapia/magnetissimo",
+//                "https://avatars2.githubusercontent.com/u/686715?v=3&amp;s=400"
+                "686715"
+        );
+
+    }
+
     private void assertImage(String storyUrl, String imageName) {
         Optional<String> mainImage = ImageResolver.resolveMainImage(storyUrl, () -> Collections.singletonList(new OpengraphImageResolver()));
         assertThat(mainImage)
