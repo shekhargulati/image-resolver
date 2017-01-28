@@ -1,4 +1,4 @@
-package mediaextractor.image.resolvers;
+package imageresolver.resolvers;
 
 import org.jsoup.nodes.Element;
 

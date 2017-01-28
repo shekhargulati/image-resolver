@@ -1,6 +1,7 @@
-package mediaextractor.image.resolvers;
+package imageresolver.resolvers;
 
-import mediaextractor.image.ImageResolver;
+import imageresolver.HtmlDoc;
+import imageresolver.HtmlToMainImageResolver;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -14,7 +15,7 @@ import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 
-public class OpengraphImageResolver implements ImageResolver {
+public class OpengraphImageResolver implements HtmlToMainImageResolver {
 
     private List<Tag> tags = Arrays.asList(
             // New Facebook
@@ -28,7 +29,11 @@ public class OpengraphImageResolver implements ImageResolver {
     );
 
     @Override
-    public Optional<String> mainImage(final String url, final String html) {
+    public Optional<String> apply(HtmlDoc htmlDoc) {
+        return htmlDoc.html.flatMap(html -> mainImage(htmlDoc.url, html));
+    }
+
+    private Optional<String> mainImage(final String url, final String html) {
         Document document = Jsoup.parse(html, url);
         Stream<Element> meta = Stream.concat(
                 document.getElementsByTag("meta").stream(),
@@ -72,12 +77,12 @@ public class OpengraphImageResolver implements ImageResolver {
     }
 
     public static class Tag {
-        public final String type;
-        public final String attribute;
-        public final String name;
-        public final String value;
+        final String type;
+        final String attribute;
+        final String name;
+        final String value;
 
-        public Tag(String type, String attribute, String name, String value) {
+        Tag(String type, String attribute, String name, String value) {
             this.type = type;
             this.attribute = attribute;
             this.name = name;
@@ -90,13 +95,13 @@ public class OpengraphImageResolver implements ImageResolver {
         private final String type;
         private int score;
 
-        public ImageSrcWithScore(String src, String type, int score) {
+        ImageSrcWithScore(String src, String type, int score) {
             this.src = src;
             this.type = type;
             this.score = score;
         }
 
-        public ImageSrcWithScore incrementScore() {
+        ImageSrcWithScore incrementScore() {
             this.score++;
             return this;
         }

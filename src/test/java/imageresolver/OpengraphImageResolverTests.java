@@ -1,15 +1,14 @@
-package mediaextractor.image;
+package imageresolver;
 
-import mediaextractor.image.resolvers.OpengraphImageResolver;
+import imageresolver.resolvers.OpengraphImageResolver;
 import org.junit.Test;
 
+import java.util.Collections;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class OpengraphImageResolverTests {
-
-    private ImageExtractor imageExtractor = new ImageExtractor();
 
     @Test
     public void should_return_image_url_from_imdb() throws Exception {
@@ -71,15 +70,13 @@ public class OpengraphImageResolverTests {
     }
 
     private void assertImage(String storyUrl, String imageName) {
-        imageExtractor.register(new OpengraphImageResolver());
-        Optional<String> mainImage = imageExtractor.mainImage(storyUrl);
+        Optional<String> mainImage = ImageResolver.resolveMainImage(storyUrl, () -> Collections.singletonList(new OpengraphImageResolver()));
         assertThat(mainImage)
                 .hasValueSatisfying(img -> img.contains(imageName));
     }
 
     private void assertNoImage(String storyUrl) {
-        imageExtractor.register(new OpengraphImageResolver());
-        Optional<String> mainImage = imageExtractor.mainImage(storyUrl);
+        Optional<String> mainImage = ImageResolver.resolveMainImage(storyUrl, () -> Collections.singletonList(new OpengraphImageResolver()));
         assertThat(mainImage)
                 .isEmpty();
     }
