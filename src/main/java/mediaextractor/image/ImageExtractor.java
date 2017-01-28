@@ -5,27 +5,27 @@ import java.util.*;
 public class ImageExtractor {
 
     private final ImageExtractionOptions options;
-    private final List<Filter> filters;
+    private final List<ImageResolver> imageResolvers;
     private ImageExtractionContext context = new ImageExtractionContext();
 
     public ImageExtractor(ImageExtractionOptions options) {
         this.options = options;
-        this.filters = new LinkedList<>();
+        this.imageResolvers = new LinkedList<>();
     }
 
     public ImageExtractor() {
         this(new ImageExtractionOptions());
     }
 
-    public ImageExtractor register(Filter... filters) {
-        this.filters.addAll(Arrays.asList(filters));
+    public ImageExtractor register(ImageResolver... imageResolvers) {
+        this.imageResolvers.addAll(Arrays.asList(imageResolvers));
         return this;
     }
 
     public Optional<String> mainImage(final String url) {
-        return filters
+        return imageResolvers
                 .stream()
-                .map(filter -> filter.resolve(url, options, context))
+                .map(imageResolver -> imageResolver.resolve(url, options, context))
                 .map(mainImage -> mainImage.isPresent() ? mainImage.get() : null)
                 .filter(Objects::nonNull)
                 .findFirst();

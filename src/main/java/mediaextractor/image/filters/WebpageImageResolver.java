@@ -1,8 +1,6 @@
 package mediaextractor.image.filters;
 
-import mediaextractor.image.Filter;
-import mediaextractor.image.ImageExtractionContext;
-import mediaextractor.image.ImageExtractionOptions;
+import mediaextractor.image.ImageResolver;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -17,54 +15,50 @@ import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class WebpageImageFilter implements Filter {
+public class WebpageImageResolver implements ImageResolver {
 
     public static final String IMG_TAG = "img";
     private static final int MINIMUM_SURFACE = 16 * 16;
 
     @Override
-    public Optional<String> resolve(final String url, final ImageExtractionOptions options, final ImageExtractionContext context) {
-        return context.fetch.fetch(url)
-                .flatMap(html -> mainImage(url, html));
-    }
-
-    private Optional<String> mainImage(String url, String html) {
+    public Optional<String> mainImage(String url, String html) {
         Document document = Jsoup.parse(html, url);
         Elements imgElements = document.getElementsByTag(IMG_TAG);
         Optional<String> mainImage = Optional.empty();
         try {
-            if (!imgElements.isEmpty()) {
-                List<ImageElementWithScore> images = imgElements.stream().map(toImg())
-                        .filter(img -> img.hasAttr("src"))
-                        .map(img -> {
-                            int width = img.hasAttr("width") ? Integer.parseInt(img.attr("width")) : 1;
-                            int height = img.hasAttr("height") ? Integer.parseInt(img.attr("height")) : 1;
-                            int surface = width * height;
-                            int score = this.score(img);
-                            System.out.println(String.format("%s has score %d", img, score));
-                            return new ImageElementWithScore(img, score, surface);
-                        })
-                        .filter(img -> img.surface > MINIMUM_SURFACE)
-                        .collect(Collectors.toList());
+            List<ImageElementWithScore> images = imgElements.stream()
+                    .map(toImg())
+                    .filter(img -> img.hasAttr("src"))
+                    .map(img -> {
+                        int width = img.hasAttr("width") ? Integer.parseInt(img.attr("width")) : 1;
+                        int height = img.hasAttr("height") ? Integer.parseInt(img.attr("height")) : 1;
+                        int surface = width * height;
+                        int score = this.score(img);
+                        return new ImageElementWithScore(img, score, surface);
+                    })
+                    .filter(img -> img.surface > MINIMUM_SURFACE)
+                    .collect(Collectors.toList());
 
-                images.sort((img1, img2) -> {
-                    if (img1.surface == img2.surface) {
-                        return img2.score - img1.score;
-                    }
-                    return img2.surface - img1.surface;
-                });
+            images.sort((img1, img2) -> {
+                if (img1.surface == img2.surface) {
+                    return img2.score - img1.score;
+                }
+                return img2.surface - img1.surface;
+            });
 
+            if (!images.isEmpty()) {
                 String image = images.get(0).image.attr("src");
                 if (!image.matches("^http")) {
                     mainImage = Optional.ofNullable(new URI(url).resolve(image).toString());
                 } else {
                     mainImage = Optional.of(image);
                 }
+                return mainImage;
             }
-            return mainImage;
         } catch (URISyntaxException e) {
             return mainImage;
         }
+        return mainImage;
     }
 
     private Function<Element, Element> toImg() {
@@ -106,7 +100,7 @@ public class WebpageImageFilter implements Filter {
                 new RulePattern("nopicture", -1)
         };
 
-        return Arrays.stream(rules).filter(r -> Pattern.compile(r.rule).matcher(src).find()).peek(System.out::println).mapToInt(r -> r.score).sum();
+        return Arrays.stream(rules).filter(r -> Pattern.compile(r.rule).matcher(src).find()).mapToInt(r -> r.score).sum();
     }
 
     private String getSrc(Element img) {
@@ -119,11 +113,6 @@ public class WebpageImageFilter implements Filter {
             src = img.attr("data-lazy-src");
         }
         return src;
-    }
-
-    public static void main(String[] args) {
-        WebpageImageFilter filter = new WebpageImageFilter();
-        System.out.println(filter.score("http://ia.media-imdb.com/images/G/01/imdb/images/nopicture/large/film-184890147._CB522736516_.png"));
     }
 
 }
@@ -144,18 +133,6 @@ class RulePattern {
                 "rule='" + rule + '\'' +
                 ", score=" + score +
                 '}';
-    }
-}
-
-class ImageElementWithScore {
-    final Element image;
-    final int score;
-    final int surface;
-
-    public ImageElementWithScore(Element image, int score, int surface) {
-        this.image = image;
-        this.score = score;
-        this.surface = surface;
     }
 }
 
