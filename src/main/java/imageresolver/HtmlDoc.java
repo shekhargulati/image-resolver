@@ -4,8 +4,8 @@ import java.util.Optional;
 
 public class HtmlDoc {
 
-    public final Optional<String> html;
     public final String url;
+    public final Optional<String> html;
 
     public HtmlDoc(String url, String html) {
         this.html = Optional.ofNullable(html);

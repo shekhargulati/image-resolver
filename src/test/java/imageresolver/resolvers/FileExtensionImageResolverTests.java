@@ -1,6 +1,7 @@
-package imageresolver;
+package imageresolver.resolvers;
 
-import imageresolver.resolvers.FileExtensionImageResolver;
+import imageresolver.HtmlDoc;
+import imageresolver.ImageResolver;
 import org.junit.Test;
 
 import java.util.Optional;

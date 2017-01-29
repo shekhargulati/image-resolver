@@ -1,6 +1,6 @@
-package imageresolver;
+package imageresolver.resolvers;
 
-import imageresolver.resolvers.OpengraphImageResolver;
+import imageresolver.ImageResolver;
 import org.junit.Test;
 
 import java.util.Collections;

@@ -1,7 +1,7 @@
 package imageresolver.resolvers;
 
 import imageresolver.HtmlDoc;
-import imageresolver.HtmlToMainImageResolver;
+import imageresolver.MainImageResolver;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -16,7 +16,7 @@ import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class WebpageImageResolver implements HtmlToMainImageResolver {
+public class WebpageImageResolver implements MainImageResolver {
 
     public static final String IMG_TAG = "img";
     private static final int MINIMUM_SURFACE = 16 * 16;

@@ -1,4 +1,4 @@
-package imageresolver;
+package imageresolver.resolvers;
 
 public class WebpageImageResolverTests {
 

@@ -33,12 +33,12 @@ public interface ImageResolver {
         ));
     }
 
-    static Optional<String> resolveMainImage(final String url, final Supplier<List<HtmlToMainImageResolver>> resolversFactory) {
+    static Optional<String> resolveMainImage(final String url, final Supplier<List<MainImageResolver>> resolversFactory) {
         return resolveMainImage(url, urlToHtml, resolversFactory);
     }
 
-    static Optional<String> resolveMainImage(final String url, final UrlToHtml urlToHtml, final Supplier<List<HtmlToMainImageResolver>> resolversFactory) {
-        List<HtmlToMainImageResolver> imageResolvers = resolversFactory.get();
+    static Optional<String> resolveMainImage(final String url, final UrlToHtml urlToHtml, final Supplier<List<MainImageResolver>> resolversFactory) {
+        List<MainImageResolver> imageResolvers = resolversFactory.get();
         HtmlDoc htmlDoc = urlToHtml.apply(url);
         return imageResolvers
                 .stream()
