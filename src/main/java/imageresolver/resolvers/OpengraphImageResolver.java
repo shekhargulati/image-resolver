@@ -30,7 +30,7 @@ public class OpengraphImageResolver implements MainImageResolver {
 
     @Override
     public Optional<String> apply(HtmlDoc htmlDoc) {
-        return htmlDoc.html.flatMap(html -> mainImage(htmlDoc.url, html));
+        return htmlDoc.html().flatMap(html -> mainImage(htmlDoc.url(), html));
     }
 
     private Optional<String> mainImage(final String url, final String html) {

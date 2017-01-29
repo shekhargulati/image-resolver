@@ -13,9 +13,9 @@ public class FileExtensionImageResolver implements MainImageResolver {
 
     @Override
     public Optional<String> apply(HtmlDoc htmlDoc) {
-        final String pathname = UrlUtils.path(htmlDoc.url);
+        final String pathname = UrlUtils.path(htmlDoc.url());
         return pattern.matcher(pathname).find()
-                ? Optional.of(htmlDoc.url)
+                ? Optional.of(htmlDoc.url())
                 : Optional.empty();
     }
 

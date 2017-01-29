@@ -19,8 +19,8 @@ public class NineGagImageResolver implements MainImageResolver {
 
     @Override
     public Optional<String> apply(final HtmlDoc htmlDoc) {
-        Matcher matcher = pattern.matcher(path(htmlDoc.url));
-        return matcher.find() && Objects.equals(host(htmlDoc.url), HOST)
+        Matcher matcher = pattern.matcher(path(htmlDoc.url()));
+        return matcher.find() && Objects.equals(host(htmlDoc.url()), HOST)
                 ? Optional.of(String.format(MAIN_IMG_TPL, matcher.group(1)))
                 : Optional.empty();
     }

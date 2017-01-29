@@ -23,7 +23,7 @@ public class WebpageImageResolver implements MainImageResolver {
 
     @Override
     public Optional<String> apply(HtmlDoc htmlDoc) {
-        return htmlDoc.html.flatMap(html -> mainImage(htmlDoc.url, html));
+        return htmlDoc.html().flatMap(html -> mainImage(htmlDoc.url(), html));
     }
 
     private Optional<String> mainImage(String url, String html) {

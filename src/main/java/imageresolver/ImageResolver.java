@@ -7,10 +7,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Supplier;
 
 public interface ImageResolver {
@@ -19,8 +16,9 @@ public interface ImageResolver {
         final OkHttpClient client = new OkHttpClient();
         try {
             final Response response = client.newCall(new Request.Builder().url(url).get().build()).execute();
+            Map<String, List<String>> headers = response.headers().toMultimap();
             String html = response.body().string();
-            return new HtmlDoc(url, html);
+            return new HtmlDoc(url, html, headers);
         } catch (IOException e) {
             return new HtmlDoc(url);
         }
