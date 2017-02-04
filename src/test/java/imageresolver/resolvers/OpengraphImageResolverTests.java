@@ -85,8 +85,7 @@ public class OpengraphImageResolverTests {
     public void should_resolve_using_opengraph_resolver() throws Exception {
         assertImage(
                 "https://www.forbes.com/sites/startswithabang/2017/01/24/nobody-knows-where-a-black-holes-information-goes/",
-//                "https://avatars2.githubusercontent.com/u/686715?v=3&amp;s=400"
-                "686715",
+                "eso1644a-1200x800.jpg",
                 Arrays.asList(
                         ImageResolvers.nineGagImageResolver,
                         ImageResolvers.opengraphImageResolver
@@ -99,8 +98,7 @@ public class OpengraphImageResolverTests {
     public void should_not_download_html_twice() throws Exception {
         assertImage(
                 "https://www.forbes.com/sites/startswithabang/2017/01/24/nobody-knows-where-a-black-holes-information-goes/",
-//                "https://avatars2.githubusercontent.com/u/686715?v=3&amp;s=400"
-                "686715",
+                "eso1644a-1200x800.jpg",
                 Arrays.asList(
                         ImageResolvers.mimeTypeImageResolver,
                         ImageResolvers.opengraphImageResolver
@@ -112,7 +110,7 @@ public class OpengraphImageResolverTests {
     private void assertImage(String storyUrl, String imageName, List<ImageResolver> imageResolvers) {
         Optional<String> mainImage = resolveMainImage(storyUrl, () -> imageResolvers);
         assertThat(mainImage)
-                .hasValueSatisfying(img -> img.contains(imageName));
+                .hasValueSatisfying(img -> assertThat(img).contains(imageName));
     }
 
     private void assertImage(String storyUrl, String imageName) {

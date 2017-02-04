@@ -61,7 +61,7 @@ public abstract class ImageResolvers {
 
     public static final ImageResolver opengraphImageResolver = new OpengraphImageResolver();
 
-    public static final ImageResolver webpageImageResolver = new WebpageImageResolver();
+    public static final ImageResolver webpageImageResolver = new WebpageMainImageResolver();
 
     public static final Supplier<List<ImageResolver>> webpageResolvers = () -> Arrays.asList(
             opengraphImageResolver,

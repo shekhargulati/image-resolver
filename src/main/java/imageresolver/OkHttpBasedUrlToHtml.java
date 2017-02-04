@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-class OkHttpBasedUrlToHtml implements UrlToHtml {
+public class OkHttpBasedUrlToHtml implements UrlToHtml {
 
     private static final Logger logger = LoggerFactory.getLogger(OkHttpBasedUrlToHtml.class);
 
