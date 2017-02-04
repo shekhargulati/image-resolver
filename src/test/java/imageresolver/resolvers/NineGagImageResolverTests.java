@@ -5,7 +5,7 @@ import org.junit.Test;
 
 import java.util.Optional;
 
-import static imageresolver.ImageResolver.resolveMainImage;
+import static imageresolver.MainImageResolver.resolveMainImage;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -45,7 +45,7 @@ public class NineGagImageResolverTests {
         return resolveMainImage(
                 url,
                 HtmlDoc::fromUrl,
-                () -> singletonList(MainImageResolvers.nineGagImageResolver)
+                () -> singletonList(ImageResolvers.nineGagImageResolver)
         );
     }
 }

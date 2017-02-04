@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import java.util.Optional;
 
-import static imageresolver.ImageResolver.resolveMainImage;
+import static imageresolver.MainImageResolver.resolveMainImage;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -88,7 +88,7 @@ public class OpengraphImageResolverTests {
     private void assertNoImage(String url) {
         Optional<String> mainImage = resolveMainImage(
                 url,
-                () -> singletonList(MainImageResolvers.opengraphImageResolver)
+                () -> singletonList(ImageResolvers.opengraphImageResolver)
         );
         assertThat(mainImage)
                 .isEmpty();

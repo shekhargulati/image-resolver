@@ -1,7 +1,7 @@
 package imageresolver.resolvers;
 
 import imageresolver.HtmlDoc;
-import imageresolver.MainImageResolver;
+import imageresolver.ImageResolver;
 import imageresolver.UrlToHtml;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -17,7 +17,7 @@ import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 
-class OpengraphImageResolver implements MainImageResolver {
+class OpengraphImageResolver implements ImageResolver {
 
     private List<Tag> tags = Arrays.asList(
             // New Facebook

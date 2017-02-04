@@ -1,8 +1,8 @@
-package imageresolver;
+package imageresolver.resolvers;
 
 import java.net.URI;
 
-public abstract class UrlUtils {
+abstract class UrlUtils {
 
     public static String path(final String url) {
         return URI.create(url).getPath();
