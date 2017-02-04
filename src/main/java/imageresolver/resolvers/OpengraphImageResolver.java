@@ -6,6 +6,8 @@ import imageresolver.UrlToHtml;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -18,6 +20,8 @@ import java.util.stream.Stream;
 import static java.util.stream.Collectors.toList;
 
 class OpengraphImageResolver implements ImageResolver {
+
+    private static final Logger logger = LoggerFactory.getLogger(OpengraphImageResolver.class);
 
     private List<Tag> tags = Arrays.asList(
             // New Facebook
@@ -32,6 +36,7 @@ class OpengraphImageResolver implements ImageResolver {
 
     @Override
     public Function<UrlToHtml, Optional<String>> apply(final String url) {
+        logger.info("Using {} to resolve url {}", this.getClass().getSimpleName(), url);
         return urlToHtml -> {
             HtmlDoc htmlDoc = urlToHtml.apply(url);
             return htmlDoc.html().flatMap(html -> mainImage(htmlDoc.url(), html));

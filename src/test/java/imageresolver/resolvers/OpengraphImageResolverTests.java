@@ -1,7 +1,10 @@
 package imageresolver.resolvers;
 
+import imageresolver.ImageResolver;
 import org.junit.Test;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static imageresolver.MainImageResolver.resolveMainImage;
@@ -76,13 +79,31 @@ public class OpengraphImageResolverTests {
 //                "https://avatars2.githubusercontent.com/u/686715?v=3&amp;s=400"
                 "686715"
         );
+    }
+
+    @Test
+    public void should_resolve_using_opengraph_resolver() throws Exception {
+        assertImage(
+                "https://www.forbes.com/sites/startswithabang/2017/01/24/nobody-knows-where-a-black-holes-information-goes/",
+//                "https://avatars2.githubusercontent.com/u/686715?v=3&amp;s=400"
+                "686715",
+                Arrays.asList(
+                        ImageResolvers.nineGagImageResolver,
+                        ImageResolvers.opengraphImageResolver
+                )
+        );
 
     }
 
-    private void assertImage(String storyUrl, String imageName) {
-        Optional<String> mainImage = resolveMainImage(storyUrl, () -> singletonList(new OpengraphImageResolver()));
+
+    private void assertImage(String storyUrl, String imageName, List<ImageResolver> imageResolvers) {
+        Optional<String> mainImage = resolveMainImage(storyUrl, () -> imageResolvers);
         assertThat(mainImage)
                 .hasValueSatisfying(img -> img.contains(imageName));
+    }
+
+    private void assertImage(String storyUrl, String imageName) {
+        assertImage(storyUrl, imageName, singletonList(ImageResolvers.opengraphImageResolver));
     }
 
     private void assertNoImage(String url) {

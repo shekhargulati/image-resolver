@@ -7,6 +7,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -19,11 +21,14 @@ import java.util.stream.Collectors;
 
 class WebpageImageResolver implements ImageResolver {
 
+    private static final Logger logger = LoggerFactory.getLogger(WebpageImageResolver.class);
+
     public static final String IMG_TAG = "img";
     private static final int MINIMUM_SURFACE = 16 * 16;
 
     @Override
     public Function<UrlToHtml, Optional<String>> apply(final String url) {
+        logger.info("Using {} to resolve url {}", this.getClass().getSimpleName(), url);
         return urlToHtml -> {
             HtmlDoc htmlDoc = urlToHtml.apply(url);
             return htmlDoc.html().flatMap(html -> mainImage(htmlDoc.url(), html));
@@ -109,7 +114,11 @@ class WebpageImageResolver implements ImageResolver {
                 new RulePattern("nopicture", -1)
         };
 
-        return Arrays.stream(rules).filter(r -> Pattern.compile(r.rule).matcher(src).find()).mapToInt(r -> r.score).sum();
+        return Arrays
+                .stream(rules)
+                .filter(r -> Pattern.compile(r.rule).matcher(src).find())
+                .mapToInt(r -> r.score)
+                .sum();
     }
 
     private String getSrc(Element img) {
@@ -128,7 +137,7 @@ class WebpageImageResolver implements ImageResolver {
         final String rule;
         final int score;
 
-        public RulePattern(String rule, int score) {
+        RulePattern(String rule, int score) {
             this.rule = rule;
             this.score = score;
         }

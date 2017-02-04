@@ -3,8 +3,8 @@ package imageresolver;
 import imageresolver.resolvers.ImageResolvers;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public abstract class MainImageResolver {
@@ -73,9 +73,9 @@ public abstract class MainImageResolver {
         return imageResolvers
                 .stream()
                 .map(imageResolver -> imageResolver.apply(url).apply(urlToHtml))
-                .map(mainImage -> mainImage.isPresent() ? mainImage.get() : null)
-                .filter(Objects::nonNull)
-                .findFirst();
+                .filter(Optional::isPresent)
+                .findFirst()
+                .flatMap(Function.identity());
     }
 
 

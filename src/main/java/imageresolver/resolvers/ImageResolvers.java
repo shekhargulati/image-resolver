@@ -2,6 +2,8 @@ package imageresolver.resolvers;
 
 import imageresolver.HtmlDoc;
 import imageresolver.ImageResolver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.List;
@@ -15,6 +17,8 @@ import static imageresolver.resolvers.UrlUtils.host;
 import static imageresolver.resolvers.UrlUtils.path;
 
 public abstract class ImageResolvers {
+    private static final Logger logger = LoggerFactory.getLogger(ImageResolvers.class);
+
     private final static List<String> CONTENT_TYPES = Arrays.asList(
             "image/jpeg",
             "image/png",
@@ -31,6 +35,7 @@ public abstract class ImageResolvers {
     private static final String NINE_GAG_MAIN_IMG_TPL = "http://img-9gag-fun.9cache.com/photo/%s_700b.jpg";
 
     public static final ImageResolver fileExtensionImageResolver = url -> urlToHtmlF -> {
+        logger.info("Using {} to resolve url {}", "FileExtensionImageResolver", url);
         final String pathname = path(url);
         return MIME_TYPE_PATTERN.matcher(pathname).find()
                 ? Optional.of(url)
@@ -38,6 +43,7 @@ public abstract class ImageResolvers {
     };
 
     public static final ImageResolver mimeTypeImageResolver = url -> urlToHtml -> {
+        logger.info("Using {} to resolve url {}", "MimeTypeImageResolver", url);
         HtmlDoc htmlDoc = urlToHtml.apply(url);
         List<String> contentType = htmlDoc.responseHeaders().get("Content-Type");
         return contentType.stream().anyMatch(CONTENT_TYPES::contains)
@@ -46,6 +52,7 @@ public abstract class ImageResolvers {
     };
 
     public static final ImageResolver nineGagImageResolver = url -> urlToHtml -> {
+        logger.info("Using {} to resolve url {}", "NineGagImageResolver", url);
         Matcher matcher = NINE_GAG_PATTERN.matcher(path(url));
         return matcher.find() && Objects.equals(host(url), NINE_GAG_HOST)
                 ? Optional.of(String.format(NINE_GAG_MAIN_IMG_TPL, matcher.group(1)))
