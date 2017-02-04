@@ -95,6 +95,19 @@ public class OpengraphImageResolverTests {
 
     }
 
+    @Test(timeout = 7000)
+    public void should_not_download_html_twice() throws Exception {
+        assertImage(
+                "https://www.forbes.com/sites/startswithabang/2017/01/24/nobody-knows-where-a-black-holes-information-goes/",
+//                "https://avatars2.githubusercontent.com/u/686715?v=3&amp;s=400"
+                "686715",
+                Arrays.asList(
+                        ImageResolvers.mimeTypeImageResolver,
+                        ImageResolvers.opengraphImageResolver
+                )
+        );
+
+    }
 
     private void assertImage(String storyUrl, String imageName, List<ImageResolver> imageResolvers) {
         Optional<String> mainImage = resolveMainImage(storyUrl, () -> imageResolvers);
