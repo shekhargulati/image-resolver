@@ -2,6 +2,7 @@ package imageresolver.resolvers;
 
 import imageresolver.HtmlDoc;
 import imageresolver.MainImageResolver;
+import imageresolver.UrlToHtml;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -10,12 +11,13 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.*;
+import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 
-public class OpengraphImageResolver implements MainImageResolver {
+class OpengraphImageResolver implements MainImageResolver {
 
     private List<Tag> tags = Arrays.asList(
             // New Facebook
@@ -29,8 +31,11 @@ public class OpengraphImageResolver implements MainImageResolver {
     );
 
     @Override
-    public Optional<String> apply(HtmlDoc htmlDoc) {
-        return htmlDoc.html().flatMap(html -> mainImage(htmlDoc.url(), html));
+    public Function<UrlToHtml, Optional<String>> apply(final String url) {
+        return urlToHtml -> {
+            HtmlDoc htmlDoc = urlToHtml.apply(url);
+            return htmlDoc.html().flatMap(html -> mainImage(htmlDoc.url(), html));
+        };
     }
 
     private Optional<String> mainImage(final String url, final String html) {

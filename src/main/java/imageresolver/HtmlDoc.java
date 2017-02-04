@@ -17,8 +17,12 @@ public class HtmlDoc {
         this.responseHeaders = responseHeaders;
     }
 
-    public HtmlDoc(String url) {
-        this(url, null, Collections.emptyMap());
+    public static HtmlDoc fromHtml(String html) {
+        return new HtmlDoc(null, html, Collections.emptyMap());
+    }
+
+    public static HtmlDoc fromUrl(String url) {
+        return new HtmlDoc(url, null, Collections.emptyMap());
     }
 
     public String url() {

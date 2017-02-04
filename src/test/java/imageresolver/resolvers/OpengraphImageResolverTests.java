@@ -1,11 +1,11 @@
 package imageresolver.resolvers;
 
-import imageresolver.ImageResolver;
 import org.junit.Test;
 
-import java.util.Collections;
 import java.util.Optional;
 
+import static imageresolver.ImageResolver.resolveMainImage;
+import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class OpengraphImageResolverTests {
@@ -80,13 +80,16 @@ public class OpengraphImageResolverTests {
     }
 
     private void assertImage(String storyUrl, String imageName) {
-        Optional<String> mainImage = ImageResolver.resolveMainImage(storyUrl, () -> Collections.singletonList(new OpengraphImageResolver()));
+        Optional<String> mainImage = resolveMainImage(storyUrl, () -> singletonList(new OpengraphImageResolver()));
         assertThat(mainImage)
                 .hasValueSatisfying(img -> img.contains(imageName));
     }
 
-    private void assertNoImage(String storyUrl) {
-        Optional<String> mainImage = ImageResolver.resolveMainImage(storyUrl, () -> Collections.singletonList(new OpengraphImageResolver()));
+    private void assertNoImage(String url) {
+        Optional<String> mainImage = resolveMainImage(
+                url,
+                () -> singletonList(MainImageResolvers.opengraphImageResolver)
+        );
         assertThat(mainImage)
                 .isEmpty();
     }

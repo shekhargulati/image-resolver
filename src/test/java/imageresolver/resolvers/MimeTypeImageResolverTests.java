@@ -1,10 +1,10 @@
 package imageresolver.resolvers;
 
-import imageresolver.ImageResolver;
 import org.junit.Test;
 
 import java.util.Optional;
 
+import static imageresolver.ImageResolver.resolveMainImage;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -49,6 +49,6 @@ public class MimeTypeImageResolverTests {
     }
 
     private Optional<String> mainImage(String url) {
-        return ImageResolver.resolveMainImage(url, () -> singletonList(new MimeTypeImageResolver()));
+        return resolveMainImage(url, () -> singletonList(MainImageResolvers.mimeTypeImageResolver));
     }
 }

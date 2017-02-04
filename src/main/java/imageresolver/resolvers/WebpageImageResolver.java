@@ -2,6 +2,7 @@ package imageresolver.resolvers;
 
 import imageresolver.HtmlDoc;
 import imageresolver.MainImageResolver;
+import imageresolver.UrlToHtml;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -16,14 +17,17 @@ import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class WebpageImageResolver implements MainImageResolver {
+class WebpageImageResolver implements MainImageResolver {
 
     public static final String IMG_TAG = "img";
     private static final int MINIMUM_SURFACE = 16 * 16;
 
     @Override
-    public Optional<String> apply(HtmlDoc htmlDoc) {
-        return htmlDoc.html().flatMap(html -> mainImage(htmlDoc.url(), html));
+    public Function<UrlToHtml, Optional<String>> apply(final String url) {
+        return urlToHtml -> {
+            HtmlDoc htmlDoc = urlToHtml.apply(url);
+            return htmlDoc.html().flatMap(html -> mainImage(htmlDoc.url(), html));
+        };
     }
 
     private Optional<String> mainImage(String url, String html) {
@@ -120,24 +124,24 @@ public class WebpageImageResolver implements MainImageResolver {
         return src;
     }
 
-}
+    private static class RulePattern {
+        final String rule;
+        final int score;
 
+        public RulePattern(String rule, int score) {
+            this.rule = rule;
+            this.score = score;
+        }
 
-class RulePattern {
-    final String rule;
-    final int score;
-
-    public RulePattern(String rule, int score) {
-        this.rule = rule;
-        this.score = score;
-    }
-
-    @Override
-    public String toString() {
-        return "RulePattern{" +
-                "rule='" + rule + '\'' +
-                ", score=" + score +
-                '}';
+        @Override
+        public String toString() {
+            return "RulePattern{" +
+                    "rule='" + rule + '\'' +
+                    ", score=" + score +
+                    '}';
+        }
     }
 }
+
+
 
