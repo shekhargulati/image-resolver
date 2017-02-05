@@ -1,7 +1,14 @@
+plugins {
+    id 'net.researchgate.release' version '2.3.3'
+}
 group 'com.shekhargulati'
 version '1.0-SNAPSHOT'
 
 apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+apply plugin: "jacoco"
 
 sourceCompatibility = 1.8
 
@@ -20,3 +27,74 @@ dependencies {
     testCompile 'org.slf4j:slf4j-simple:1.7.22'
 
 }
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: System.getenv('OSS_USER'), password: System.getenv('OSS_PASSWORD'))
+            }
+
+            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: System.getenv('OSS_USER'), password: System.getenv('OSS_PASSWORD'))
+            }
+
+            pom.project {
+                name 'image-resolver'
+                packaging 'jar'
+                artifactId 'image-resolver'
+                description 'A Java 8 library to extract main image from a URL or HTML'
+                url 'https://github.com/shekhargulati/image-resolver'
+
+                scm {
+                    connection 'https://github.com/shekhargulati/image-resolver.git'
+                    developerConnection 'https://github.com/shekhargulati/image-resolver.git'
+                    url 'https://github.com/shekhargulati/image-resolver.git'
+                }
+
+                licenses {
+                    license {
+                        name 'Apache'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id 'shekhargulati'
+                        name 'Shekhar Gulati'
+                        email 'shekhargulati84@gmail.com'
+                    }
+                }
+            }
+        }
+    }
+}
+
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives javadocJar, sourcesJar
+}
+
+signing {
+    sign configurations.archives
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+}
+
+check.dependsOn jacocoTestReport
