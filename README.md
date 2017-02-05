@@ -1,4 +1,4 @@
-image-resolver [![Build Status](https://travis-ci.org/shekhargulati/image-resolver.svg?branch=master)](https://travis-ci.org/shekhargulati/image-resolver) [![codecov.io](https://codecov.io/github/shekhargulati/image-resolver/coverage.svg?branch=master)](https://codecov.io/github/shekhargulati/image-resolver?branch=master) [![License](https://img.shields.io/:license-mit-blue.svg)](./LICENSE.txt)
+image-resolver [![Build Status](https://travis-ci.org/shekhargulati/image-resolver.svg?branch=master)](https://travis-ci.org/shekhargulati/image-resolver) [![codecov.io](https://codecov.io/github/shekhargulati/image-resolver/coverage.svg?branch=master)](https://codecov.io/github/shekhargulati/image-resolver?branch=master) [![License](https://img.shields.io/:license-apache-blue.svg)](./LICENSE)
 ------
 
 A Java 8 library to extract main image from a URL.
@@ -25,3 +25,7 @@ Gradle users can add following to their build.gradle file.
 ```
 compile(group: 'com.shekhargulati', name: 'image-resolver', version: '0.1.0')
 ```
+
+## Inspiration
+
+This library is inspired by Maurice Svay [ImageResolver](https://github.com/mauricesvay/ImageResolver) JavaScript library.
