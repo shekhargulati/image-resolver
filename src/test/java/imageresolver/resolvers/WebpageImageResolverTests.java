@@ -8,7 +8,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class WebpageMainImageResolverTests {
+public class WebpageImageResolverTests {
 
     @Test
     public void extract_image_from_webpage_theverge() throws Exception {
@@ -171,7 +171,7 @@ public class WebpageMainImageResolverTests {
     }
 
     public void assertImage(String url, String expectedImg) {
-        WebpageMainImageResolver resolver = new WebpageMainImageResolver();
+        WebpageImageResolver resolver = new WebpageImageResolver();
         Optional<String> mainImage = resolver.apply(url).apply(new OkHttpBasedUrlToHtml());
         System.out.println(String.format("Main image %s", mainImage));
         assertThat(mainImage)
@@ -179,7 +179,7 @@ public class WebpageMainImageResolverTests {
     }
 
     public void assertNoImage(String url) {
-        WebpageMainImageResolver resolver = new WebpageMainImageResolver();
+        WebpageImageResolver resolver = new WebpageImageResolver();
         Optional<String> mainImage = resolver.apply(url).apply(new OkHttpBasedUrlToHtml());
         System.out.println(String.format("Main image %s", mainImage));
         assertThat(mainImage)

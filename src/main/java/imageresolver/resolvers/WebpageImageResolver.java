@@ -17,7 +17,7 @@ import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class WebpageMainImageResolver implements ImageResolver {
+public class WebpageImageResolver implements ImageResolver {
 
     private static final Pattern AD_PATTERN = Pattern.compile("[-_]ad", Pattern.CASE_INSENSITIVE);
     private static final int MINIMUM_SURFACE = 16 * 16;
