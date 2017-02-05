@@ -21,7 +21,6 @@ public class WebpageImageResolver implements ImageResolver {
 
     private static final Pattern AD_PATTERN = Pattern.compile("[-_]ad", Pattern.CASE_INSENSITIVE);
     private static final int MINIMUM_SURFACE = 16 * 16;
-    private static final Pattern IMAGE_TYPE_PATTERN = Pattern.compile("\\.(png|jpg|jpeg)", Pattern.CASE_INSENSITIVE);
 
     @Override
     public Function<UrlToHtml, Optional<String>> apply(final String url) {
@@ -92,7 +91,6 @@ public class WebpageImageResolver implements ImageResolver {
     }
 
     private Optional<String> mainImage(String url, Element mainSection) {
-        System.out.println(mainSection.id() + ", " + mainSection.className());
         Elements imgElements = mainSection.getElementsByTag("img");
 
         final AtomicInteger imgDis = new AtomicInteger(0);
@@ -102,11 +100,8 @@ public class WebpageImageResolver implements ImageResolver {
                     .map(toImg())
                     .filter(img -> img.hasAttr("src"))
                     .filter(img -> !img.attr("src").contains("data:image/gif;"))
-//                    .filter(img -> IMAGE_TYPE_PATTERN.matcher(img.attr("src")).find())
                     .map(img -> {
                         int width = img.hasAttr("width") ? Integer.parseInt(img.attr("width")) : 1;
-//                        int height = img.hasAttr("height") ? Integer.parseInt(img.attr("height")) : 1;
-
                         int surface = width  < MINIMUM_SURFACE ? 1 : width ;
                         int score = this.score(img);
                         return new ImageElementWithScore(img, score, surface, imgDis.incrementAndGet());
@@ -119,8 +114,6 @@ public class WebpageImageResolver implements ImageResolver {
                         return img2.surface - img1.surface;
                     })
                     .collect(Collectors.toList());
-
-            images.forEach(System.out::println);
 
             if (!images.isEmpty()) {
                 String image = images.get(0).image.attr("src");
