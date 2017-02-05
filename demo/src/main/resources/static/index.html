@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Extract Main Image from URL</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="bootstrap.css">
+    <style type="text/css">
+body {
+	padding-top: 60px;
+	padding-bottom: 60px;
+}
+</style>
+</head>
+<body>
+
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse"
+                    data-target=".navbar-collapse">
+                <span class="icon-bar"></span> <span class="icon-bar"></span> <span
+                    class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">ImageResolver</a>
+        </div>
+
+    </div>
+</div>
+
+<div id="main" class="container">
+    <form>
+        <div class="form-group">
+            <div class="col-sm-10">
+                <input type="url" class="form-control" id="url" name="url" class="input-lg" required>
+            </div>
+        </div>
+        <br><br><br>
+        <div class="form-group">
+            <div class="col-sm-10">
+                <input type="submit" value="Extract Main Image" id="submitUrl"
+                       class="btn btn-success">
+            </div>
+        </div>
+    </form>
+</div>
+<div id="loading" style="display: none;" class="container">
+    <img src="loader.gif" alt="Please wait.." />
+</div>
+<br>
+<br>
+<br>
+<div id="result" class="container"></div>
+
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript">
+	$("#submitUrl").on("click", function(event){
+		$("#result").empty();
+		event.preventDefault();
+		var url = $("#url").val();
+		if(!url){
+			alert("Please enter url");
+			return;
+		}
+		$('#loading').show();
+		$.get('/api/v1/images?url='+url,function(result){
+		    $('#loading').hide(); 
+			$("#result").append("<img src='"+result.mainImage+"'</img>");
+	})
+
+
+	});
+	
+</script>
+</body>
+</html>

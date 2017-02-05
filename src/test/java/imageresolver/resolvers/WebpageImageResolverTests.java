@@ -27,7 +27,7 @@ public class WebpageImageResolverTests {
         );
     }
 
-    @Ignore
+    @Test
     public void extract_image_from_webpage_recruiter() throws Exception {
         assertImage(
                 "https://www.recruiter.com/i/10-more-staffing-and-recruiting-startups-to-watch/",
