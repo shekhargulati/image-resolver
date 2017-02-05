@@ -24,3 +24,4 @@ Gradle users can add following to their build.gradle file.
 
 ```
 compile(group: 'com.shekhargulati', name: 'image-resolver', version: '0.1.0')
+```
