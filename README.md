@@ -1,7 +1,7 @@
 image-resolver [![Build Status](https://travis-ci.org/shekhargulati/image-resolver.svg?branch=master)](https://travis-ci.org/shekhargulati/image-resolver) [![codecov.io](https://codecov.io/github/shekhargulati/image-resolver/coverage.svg?branch=master)](https://codecov.io/github/shekhargulati/image-resolver?branch=master) [![License](https://img.shields.io/:license-apache-blue.svg)](./LICENSE)
 ------
 
-A Java 8 library to extract main image from a URL.
+A Java 8 library to extract main image from a URL. You can try the demo application [https://safe-stream-10070.herokuapp.com/](https://safe-stream-10070.herokuapp.com/).
 
 Getting Started
 --------
@@ -24,6 +24,32 @@ Gradle users can add following to their build.gradle file.
 
 ```
 compile(group: 'com.shekhargulati', name: 'image-resolver', version: '0.1.0')
+```
+
+## Using the API
+
+It is very easy to use the API.
+
+### Extracting image from URL.
+
+```java
+String url = "https://medium.com/the-mission/how-to-get-people-to-like-you-in-5-seconds-or-less-67e64cb91155#.tp52bdm6m";
+Optional<String> mainImage = MainImageResolver.resolveMainImage(url);
+// Return  Optional("https://cdn-images-1.medium.com/max/1200/1*-yql2CobEo8rGLCZv2gOyw.jpeg")
+```
+
+### Extracting image from HTML
+
+```java
+Optional<String> mainImage = MainImageResolver.resolveMainImageFromHtml(html)
+```
+
+### Extracting image using your HTML fetcher
+
+If you want to use your own way to fetch HTML then you can use.
+
+```java
+Optional<String> mainImage = MainImageResolver.resolveMainImage(url, url -> fetchHtml(), ImageResolvers.webpageResolvers);
 ```
 
 ## Inspiration
