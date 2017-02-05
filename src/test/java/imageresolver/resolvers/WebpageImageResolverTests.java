@@ -170,6 +170,22 @@ public class WebpageImageResolverTests {
         );
     }
 
+    @Test
+    public void extract_image_from_webpage_guardian() throws Exception {
+        assertImage(
+                "https://www.theguardian.com/commentisfree/2016/jan/10/alcohol-guidelines-drinking-orwell-perfect-pub",
+                "5106.jpg"
+        );
+    }
+
+    @Test
+    public void extract_image_from_webpage_chronicle() throws Exception {
+        assertImage(
+                "http://www.chronicle.com/article/I-Have-Multiple-Loves-/239077",
+                "photo_80342_landscape_850x566.jpg"
+        );
+    }
+
     public void assertImage(String url, String expectedImg) {
         WebpageImageResolver resolver = new WebpageImageResolver();
         Optional<String> mainImage = resolver.apply(url).apply(new OkHttpBasedUrlToHtml());
