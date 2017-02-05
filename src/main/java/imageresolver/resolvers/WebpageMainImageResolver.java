@@ -48,11 +48,19 @@ public class WebpageMainImageResolver implements ImageResolver {
                             ))
                             .collect(Collectors.toList());
 
+                    Optional<Element> mainDiv = divs
+                            .stream()
+                            .filter(e -> hasClassWithName(e, "main") || hasClassWithName(e, "content") || hasClassWithName(e, "page-content"))
+                            .findFirst();
+                     if(mainDiv.isPresent() && mainDiv.get().childNodes().stream().filter(n -> n instanceof Element).map(n -> (Element)n).anyMatch(e -> !AD_PATTERN.matcher(e.className()).find())){
+                         return mainDiv;
+                     }
                     return divs
                             .stream()
                             .sorted(Comparator.comparingInt((Element e) -> e.getAllElements().size()).reversed())
-                            .findFirst()
-                            .map(this::findElementWithMostParagraphs);
+                            .map(this::findElementWithMostParagraphs)
+                            .map(Element::parent)
+                            .findFirst();
                 };
 
 
@@ -65,6 +73,10 @@ public class WebpageMainImageResolver implements ImageResolver {
 
             return urlToHtml.andThen(extractMainImageFromHtml).apply(url);
         };
+    }
+
+    public boolean hasClassWithName(Element e, String className) {
+        return e.getElementsByClass(className).size() > 0;
     }
 
     private Element findElementWithMostParagraphs(Element main) {
@@ -90,11 +102,12 @@ public class WebpageMainImageResolver implements ImageResolver {
                     .map(toImg())
                     .filter(img -> img.hasAttr("src"))
                     .filter(img -> !img.attr("src").contains("data:image/gif;"))
-                    .filter(img -> IMAGE_TYPE_PATTERN.matcher(img.attr("src")).find())
+//                    .filter(img -> IMAGE_TYPE_PATTERN.matcher(img.attr("src")).find())
                     .map(img -> {
                         int width = img.hasAttr("width") ? Integer.parseInt(img.attr("width")) : 1;
-                        int height = img.hasAttr("height") ? Integer.parseInt(img.attr("height")) : 1;
-                        int surface = width * height < MINIMUM_SURFACE ? 1 : width * height;
+//                        int height = img.hasAttr("height") ? Integer.parseInt(img.attr("height")) : 1;
+
+                        int surface = width  < MINIMUM_SURFACE ? 1 : width ;
                         int score = this.score(img);
                         return new ImageElementWithScore(img, score, surface, imgDis.incrementAndGet());
                     })
@@ -164,7 +177,8 @@ public class WebpageMainImageResolver implements ImageResolver {
                 new RulePattern("doubleclick", -1),
                 new RulePattern("nopicture", -1),
                 new RulePattern("cloudfront", 1),
-                new RulePattern("rss", -1)
+                new RulePattern("rss", -1),
+                new RulePattern("logo", -1)
         };
 
         return Arrays
