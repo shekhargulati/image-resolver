@@ -4,6 +4,7 @@
     <title>Extract Main Image from URL</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="app.css">
     <style type="text/css">
 body {
 	padding-top: 60px;
@@ -31,7 +32,24 @@ body {
     <form>
         <div class="form-group">
             <div class="col-sm-10">
-                <input type="url" class="form-control" id="url" name="url" class="input-lg" required>
+                <input type="url" class="form-control" id="url" name="url" class="input-lg" placeholder="Enter a url..." required>
+            </div>
+        </div>
+        
+        <br><br><br>
+        <div class="form-group">
+            <div class="col-sm-10">
+                <ul class="examples">
+                    <li>Try one of these examples:</li>
+                    <li><a href="https://medium.com/the-mission/how-to-get-people-to-like-you-in-5-seconds-or-less-67e64cb91155#.tp52bdm6m">medium.com</a></li>
+                    <li><a href="https://techcrunch.com/2017/02/03/federal-judge-puts-nationwide-block-on-president-trumps-travel-ban/">techcrunch.com</a></li>
+                    <li><a href="http://www.theverge.com/circuitbreaker/2017/2/3/14501812/olimex-teres-i-open-source-diy-laptop">theverge.com</a></li>
+                    <li><a href="http://dribbble.com/shots/1568411-Pink-smoke">dribbble.com</a></li>
+                    <li><a href="http://www.npr.org/sections/thetwo-way/2017/02/03/513259703/in-just-5-moves-grandmaster-loses-and-leaves-chess-world-aghast">npr.org</a></li>
+                    <li><a href="https://qz.com/898207/the-psychology-of-why-americans-are-more-scared-of-terrorism-than-guns-though-guns-are-3210-times-likelier-to-kill-them/">qz.com</a></li>
+                    <li><a href="http://www.reuters.com/article/us-france-election-macron-idUSKBN15J0RQ">reuters.com</a></li>
+                    
+                </ul>
             </div>
         </div>
         <br><br><br>
@@ -40,6 +58,8 @@ body {
                 <input type="submit" value="Extract Main Image" id="submitUrl"
                        class="btn btn-success">
             </div>
+
+            
         </div>
     </form>
 </div>
@@ -66,9 +86,12 @@ body {
 		    $('#loading').hide(); 
 			$("#result").append("<img src='"+result.mainImage+"'</img>");
 	})
-
-
 	});
+	
+	$('.examples a').on('click', function(e){
+            e.preventDefault();
+            $("#url").val($(this).attr('href'));
+    });
 	
 </script>
 </body>
