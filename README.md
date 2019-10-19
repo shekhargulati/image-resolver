@@ -1,8 +1,7 @@
 image-resolver [![Build Status](https://travis-ci.org/shekhargulati/image-resolver.svg?branch=master)](https://travis-ci.org/shekhargulati/image-resolver) [![codecov.io](https://codecov.io/github/shekhargulati/image-resolver/coverage.svg?branch=master)](https://codecov.io/github/shekhargulati/image-resolver?branch=master) [![License](https://img.shields.io/:license-apache-blue.svg)](./LICENSE)
 ------
 
-A Java 8 library to extract main image from a URL. You can try the demo application [https://safe-stream-10070.herokuapp.com/](https://safe-stream-10070.herokuapp.com/).
-
+A Java 8 library to extract main image from a URL. 
 Getting Started
 --------
 
